@@ -51,6 +51,8 @@
     }
     const res = await fetch(cfg.API_URL, {
       method: "POST",
+      redirect: "follow",
+      cache: "no-store",
       headers: { "Content-Type": "text/plain;charset=utf-8" },
       body: JSON.stringify({ action, partidaId: cfg.PARTIDA_ID, ...payload })
     });

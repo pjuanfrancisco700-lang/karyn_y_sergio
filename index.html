@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no,maximum-scale=1" />
+  <meta name="theme-color" content="#0f1f1a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Isla" />
+  <meta name="format-detection" content="telephone=no" />
+  <title>Sobrevive a la Isla</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./assets/icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div id="app" class="app-shell">
+    <div class="ambient ambient-a"></div>
+    <div class="ambient ambient-b"></div>
+
+    <header class="topbar glass">
+      <div class="brand">
+        <div class="brand-mark">🏝️</div>
+        <div>
+          <p class="eyebrow">PARTIDA PRIVADA</p>
+          <h1>Sobrevive a la Isla</h1>
+        </div>
+      </div>
+
+      <button id="soundBtn" class="icon-btn" aria-label="Sonido" title="Sonido">
+        <span id="soundIcon">🔊</span>
+      </button>
+    </header>
+
+    <main class="game-layout">
+      <section class="hud glass">
+        <article class="player-card active" id="player1Card">
+          <div class="player-head">
+            <div class="avatar" id="p1Avatar">🧑‍🚀</div>
+            <div>
+              <span class="player-label">Jugador 1</span>
+              <strong id="p1Name">Jugador 1</strong>
+            </div>
+          </div>
+          <div class="stats-grid compact">
+            <div class="stat"><span>❤️</span><strong id="p1Vida">100</strong></div>
+            <div class="stat"><span>🍖</span><strong id="p1Comida">60</strong></div>
+            <div class="stat"><span>💧</span><strong id="p1Agua">60</strong></div>
+            <div class="stat"><span>⚡</span><strong id="p1Energia">100</strong></div>
+          </div>
+        </article>
+
+        <div class="round-pill">
+          <span>Ronda</span>
+          <strong id="roundNumber">1</strong>
+        </div>
+
+        <article class="player-card" id="player2Card">
+          <div class="player-head">
+            <div class="avatar" id="p2Avatar">🧑‍🚀</div>
+            <div>
+              <span class="player-label">Jugador 2</span>
+              <strong id="p2Name">Jugador 2</strong>
+            </div>
+          </div>
+          <div class="stats-grid compact">
+            <div class="stat"><span>❤️</span><strong id="p2Vida">100</strong></div>
+            <div class="stat"><span>🍖</span><strong id="p2Comida">60</strong></div>
+            <div class="stat"><span>💧</span><strong id="p2Agua">60</strong></div>
+            <div class="stat"><span>⚡</span><strong id="p2Energia">100</strong></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="island-stage glass">
+        <div class="stage-top">
+          <div>
+            <p class="eyebrow">TURNO ACTUAL</p>
+            <h2 id="turnText">Jugador 1</h2>
+          </div>
+          <div class="timer-ring" aria-label="Tiempo restante">
+            <svg viewBox="0 0 44 44">
+              <circle class="timer-bg" cx="22" cy="22" r="18"></circle>
+              <circle id="timerProgress" class="timer-progress" cx="22" cy="22" r="18"></circle>
+            </svg>
+            <span id="timerText">45</span>
+          </div>
+        </div>
+
+        <div id="islandBoard" class="island-board" aria-label="Mapa de la isla"></div>
+
+        <div class="stage-footer">
+          <div class="score-chip"><span>⭐</span><strong id="myScore">0</strong></div>
+          <div class="score-chip"><span>💰</span><strong id="myCoins">0</strong></div>
+          <div class="score-chip"><span>🛡️</span><strong id="myShield">0</strong></div>
+          <button id="inventoryBtn" class="pill-btn">🎒 Inventario</button>
+        </div>
+      </section>
+
+      <section class="action-panel glass">
+        <div class="action-grid">
+          <button class="action-btn primary" data-action="Explorar">
+            <span>🧭</span><b>Explorar</b>
+          </button>
+          <button class="action-btn" data-action="Buscar comida">
+            <span>🍖</span><b>Comida</b>
+          </button>
+          <button class="action-btn" data-action="Buscar agua">
+            <span>💧</span><b>Agua</b>
+          </button>
+          <button class="action-btn" data-action="Descansar">
+            <span>😴</span><b>Descansar</b>
+          </button>
+          <button class="action-btn danger" data-action="Atacar">
+            <span>⚔️</span><b>Atacar</b>
+          </button>
+          <button class="action-btn" data-action="Defender">
+            <span>🛡️</span><b>Defender</b>
+          </button>
+        </div>
+
+        <div class="quick-message">
+          <button class="emoji-chip" data-emoji="😏">😏</button>
+          <button class="emoji-chip" data-emoji="😂">😂</button>
+          <button class="emoji-chip" data-emoji="🔥">🔥</button>
+          <button class="emoji-chip" data-emoji="❤️">❤️</button>
+          <button id="messageBtn" class="message-btn">Mensaje</button>
+        </div>
+      </section>
+    </main>
+
+    <div id="toast" class="toast"></div>
+
+    <div id="messageBubble" class="message-bubble hidden">
+      <div class="bubble-emoji" id="bubbleEmoji">😏</div>
+      <div>
+        <strong id="bubbleFrom">Jugador</strong>
+        <p id="bubbleText">Mensaje</p>
+      </div>
+    </div>
+
+    <div id="joinModal" class="modal open">
+      <div class="modal-card glass">
+        <div class="modal-icon">🏝️</div>
+        <p class="eyebrow">ENTRAR A LA PARTIDA</p>
+        <h2>Elige tu jugador</h2>
+        <div class="join-options">
+          <button class="join-player" data-player="J1">
+            <span>🧑‍🚀</span>
+            <div><small>Jugador 1</small><strong id="joinP1Name">Jugador 1</strong></div>
+          </button>
+          <button class="join-player" data-player="J2">
+            <span>🧑‍🚀</span>
+            <div><small>Jugador 2</small><strong id="joinP2Name">Jugador 2</strong></div>
+          </button>
+        </div>
+        <p class="microcopy">La partida se sincroniza automáticamente.</p>
+      </div>
+    </div>
+
+    <div id="inventoryModal" class="modal">
+      <div class="modal-card glass">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">MOCHILA</p>
+            <h2>Inventario</h2>
+          </div>
+          <button class="icon-btn close-modal" data-close="inventoryModal">✕</button>
+        </div>
+        <div id="inventoryList" class="inventory-list"></div>
+      </div>
+    </div>
+
+    <div id="messageModal" class="modal">
+      <div class="modal-card glass">
+        <div class="modal-header">
+          <div>
+            <p class="eyebrow">MENSAJE TEMPORAL</p>
+            <h2>Enviar</h2>
+          </div>
+          <button class="icon-btn close-modal" data-close="messageModal">✕</button>
+        </div>
+        <div class="emoji-row">
+          <button class="emoji-choice selected" data-emoji="😏">😏</button>
+          <button class="emoji-choice" data-emoji="😂">😂</button>
+          <button class="emoji-choice" data-emoji="🔥">🔥</button>
+          <button class="emoji-choice" data-emoji="❤️">❤️</button>
+          <button class="emoji-choice" data-emoji="😈">😈</button>
+        </div>
+        <textarea id="messageInput" maxlength="80" placeholder="Escribe algo corto..."></textarea>
+        <button id="sendMessageBtn" class="cta-btn">Enviar mensaje</button>
+      </div>
+    </div>
+
+    <div id="resultModal" class="modal">
+      <div class="modal-card glass center">
+        <div class="result-emoji" id="resultEmoji">🧭</div>
+        <p class="eyebrow">RESULTADO</p>
+        <h2 id="resultTitle">Acción completada</h2>
+        <p id="resultText">Exploraste una nueva zona.</p>
+        <button class="cta-btn close-modal" data-close="resultModal">Continuar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="./config.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

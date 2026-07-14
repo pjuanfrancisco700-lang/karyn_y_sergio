@@ -117,3 +117,155 @@ textarea{width:100%;min-height:110px;resize:none;border:1px solid var(--line);bo
   .action-btn{min-height:61px}
   .player-head strong{max-width:74px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 }
+
+
+/* ===== Corrección móvil iPhone / Android ===== */
+html, body, .app-shell {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.game-layout,
+.hud,
+.island-stage,
+.action-panel,
+.player-card {
+  min-width: 0;
+}
+
+@media (max-width: 700px) {
+  .topbar {
+    margin-bottom: 9px;
+  }
+
+  .hud {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    grid-template-areas:
+      "round round"
+      "p1 p2";
+    gap: 8px;
+    padding: 9px;
+  }
+
+  #player1Card { grid-area: p1; }
+  #player2Card { grid-area: p2; }
+
+  .round-pill {
+    grid-area: round;
+    width: max-content;
+    min-width: 92px;
+    margin: 0 auto;
+    display: flex;
+    gap: 7px;
+    align-items: baseline;
+    justify-content: center;
+    padding: 6px 14px;
+  }
+
+  .round-pill span,
+  .round-pill strong {
+    display: inline;
+  }
+
+  .player-card {
+    width: 100%;
+    overflow: hidden;
+    padding: 9px;
+  }
+
+  .player-head {
+    min-width: 0;
+  }
+
+  .player-head > div:last-child {
+    min-width: 0;
+  }
+
+  .player-head strong {
+    display: block;
+    width: 100%;
+    max-width: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  .stat {
+    min-width: 0;
+    padding: 6px 2px;
+  }
+
+  .island-stage {
+    min-height: 0;
+    padding: 12px 10px;
+  }
+
+  .stage-top {
+    padding: 0 2px;
+  }
+
+  .island-board {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+    gap: 3px;
+    padding: 7px;
+    margin: 12px 0;
+    border-radius: 22px;
+  }
+
+  .tile {
+    min-width: 0;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    border-radius: 7px;
+    font-size: clamp(10px, 4vw, 17px);
+  }
+
+  .stage-footer {
+    width: 100%;
+  }
+
+  .pill-btn {
+    margin-left: 0;
+    flex: 1 1 100%;
+  }
+
+  .action-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 370px) {
+  .brand h1 {
+    font-size: 16px;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+  }
+
+  .avatar {
+    width: 31px;
+    height: 31px;
+  }
+
+  .player-head strong {
+    font-size: 11px;
+  }
+
+  .stat {
+    font-size: 10px;
+  }
+
+  .action-btn {
+    min-height: 58px;
+  }
+}

@@ -146,9 +146,17 @@
       t.classList.toggle("player-two", p2.Posición === t.dataset.id);
     });
 
-    const myTurn = state.game["Turno actual"] === state.me && state.game.Estado === "En curso";
-    $$(".action-btn").forEach(b => b.disabled = !myTurn);
-    if(myTurn) resetTimer();
+    const isRunning = state.game.Estado === "En curso";
+    const myTurn = state.game["Turno actual"] === state.me && isRunning;
+
+    $$(".action-btn").forEach(button => {
+      button.disabled = !myTurn;
+      button.title = !isRunning
+        ? "La partida todavía no ha iniciado"
+        : (!myTurn ? "Espera el turno del otro jugador" : "");
+    });
+
+    if (myTurn) resetTimer();
   }
 
   async function refresh(){
@@ -252,11 +260,58 @@
     },1000);
   }
 
-  function choosePlayer(id){
-    state.me = id;
-    localStorage.setItem("isla_player",id);
-    closeModal("joinModal");
-    render();
+  async function choosePlayer(id){
+    try{
+      state.me = id;
+      localStorage.setItem("isla_player", id);
+
+      const selected = player(id);
+      const joined = await api("unirse", {
+        jugadorId: id,
+        nombre: selected.Nombre || (id === "J1" ? "Jugador 1" : "Jugador 2"),
+        avatar: selected.Avatar || "🧑‍🚀"
+      });
+
+      if (joined && joined.partida) {
+        state.game = joined.partida;
+        state.players = joined.jugadores || state.players;
+      }
+
+      closeModal("joinModal");
+      render();
+      showToast("Entraste a la partida");
+    }catch(err){
+      showToast(err.message || "No fue posible entrar");
+      openModal("joinModal");
+    }
+  }
+
+  async function ensureJoined(){
+    if (!state.me) {
+      openModal("joinModal");
+      return;
+    }
+
+    try{
+      const selected = player(state.me);
+      const joined = await api("unirse", {
+        jugadorId: state.me,
+        nombre: selected.Nombre || (state.me === "J1" ? "Jugador 1" : "Jugador 2"),
+        avatar: selected.Avatar || "🧑‍🚀"
+      });
+
+      if (joined && joined.partida) {
+        state.game = joined.partida;
+        state.players = joined.jugadores || state.players;
+      }
+
+      closeModal("joinModal");
+      render();
+    }catch(err){
+      console.error(err);
+      openModal("joinModal");
+      showToast("Toca tu jugador para entrar");
+    }
   }
 
   function bind(){
@@ -287,10 +342,14 @@
     }
   }
 
-  buildBoard();
-  bind();
-  registerPWA();
-  refresh();
-  state.pollHandle = setInterval(refresh,cfg.POLL_INTERVAL_MS);
-  if(state.me) closeModal("joinModal");
+  async function start(){
+    buildBoard();
+    bind();
+    registerPWA();
+    await refresh();
+    await ensureJoined();
+    state.pollHandle = setInterval(refresh, cfg.POLL_INTERVAL_MS);
+  }
+
+  start();
 })();

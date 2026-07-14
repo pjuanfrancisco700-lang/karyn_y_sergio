@@ -1,4 +1,4 @@
-const CACHE = "isla-v2";
+const CACHE = "isla-v3";
 const ASSETS = ["./","./index.html","./styles.css","./app.js","./config.js","./manifest.webmanifest","./assets/icon.svg"];
 
 self.addEventListener("install", event => {
